@@ -109,10 +109,12 @@ export default function useRealTime({
             console.error("Failed to parse JSON message:", e);
             throw e;
         }
-
         switch (message.type) {
             case "response.done":
-                onReceivedResponseDone?.(message as ResponseDone);
+                const responseData = message as ResponseDone;
+                // @ts-ignore
+                const transcript = message?.response.output[0].content[0].transcript;
+                onReceivedResponseDone?.(responseData);
                 break;
             case "response.audio.delta":
                 onReceivedResponseAudioDelta?.(message as ResponseAudioDelta);
